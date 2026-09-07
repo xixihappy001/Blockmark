@@ -35,9 +35,17 @@ pnpm build
 - `public/`：站点图标和图片资源。
 - `.openai/hosting.json`、`vite.config.ts`：Sites 发布和运行时绑定配置。
 
-## 部署说明
+## 1Panel / Docker 部署
 
-当前项目使用 React、Vinext 和 Cloudflare Workers 兼容运行时，依赖 D1（`DB`）及 R2（`LOGOS`）绑定。现有 Sites 配置关联原网站；新建独立部署时需要为自己的环境配置对应资源并执行数据库迁移。
+仓库包含 `Dockerfile` 和 `docker-compose.yml`。在 1Panel 的容器编排中使用该 Compose 文件即可从 GitHub 构建。服务只监听服务器本机的 `3010` 端口，再由 1Panel 网站反向代理到 `http://127.0.0.1:3010`。
+
+`blockmark-data` 数据卷保存收藏数据库和上传的图标。更新或重启容器不会删除该数据卷。
+
+首次启动后，访问首页会自动建立同步数据表。若需要更新代码，在 1Panel 中重新构建并启动该编排。
+
+## 其他部署说明
+
+当前项目使用 React、Vinext 和 Cloudflare Workers 兼容运行时，依赖 D1（`DB`）及 R2（`LOGOS`）绑定。Docker 部署通过本地 Workers 运行时提供并持久化这两个绑定；现有 Sites 配置仍关联原网站。
 
 当前同步数据是站点级个人收藏，访问保护由原 Sites 托管入口提供。部署到其他环境时，需要同时配置身份验证和访问控制；本项目尚未实现独立的 Google 或邮箱登录，也不是可直接放入普通静态服务器的纯静态站点。
 

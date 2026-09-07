@@ -1,0 +1,15 @@
+services:
+  blockmark:
+    build:
+      context: https://github.com/xixihappy001/Blockmark.git#main
+      dockerfile: Dockerfile
+    container_name: blockmark
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3010:3000"
+    volumes:
+      - blockmark-data:/data/wrangler
+
+volumes:
+  blockmark-data:
+    name: blockmark-data
